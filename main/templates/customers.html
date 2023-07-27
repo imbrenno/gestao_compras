@@ -1,0 +1,36 @@
+{% extends "template.html" %}
+{% block conteudo%}
+<br>
+<table class="table">
+        <thead class="thead-dark">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Razão Social</th>
+              <th scope="col">CNPJ</th>
+              <th scope="col">Gestor da Carteira</th>
+              <th scope="col">Ativo</th>
+              <th scope="col"></th>
+
+            </tr>
+          </thead>
+    {% for customers in customers %}
+    <tr>
+        <td>{{ customers.id }}</td>
+        <td>{{ customers.companyName }}</td>
+        <td>{{ customers.vat }}</td>
+        <td>{{ customers.walletManagerId }}</td>
+        <td>{{ customers.active }}</td>
+        <td>
+          <form action="#" method="get">
+              <input type="hidden" name="id" value="{{ customers.id }}">
+              <button type="submit">Editar</button>
+          </form>
+      </td>
+    </tr>
+    {% endfor %}
+</table>
+<br>
+<a class="btn btn-primary btn-sm" href="../create_user" role="button">Cadastrar Cliente</a>
+{% endblock %}
+
+

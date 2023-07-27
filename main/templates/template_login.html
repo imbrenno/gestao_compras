@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gestão de Compras</title>
+    <link rel="stylesheet" href= "{{ url_for('static', filename='bootstrap.min.css') }}" >
+    <link href="{{ url_for('static', filename='signin.css') }}" rel="stylesheet">
+    <style>
+        @font-face{
+            font-family: 'Aileron'; 
+            font-weight: 400;
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Roboto-Regular.ttf);  
+        }
+        @font-face{
+            font-family: 'Aileron'; 
+            font-weight: 400;
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Aileron-Regular.ttf);
+            unicode-range: U+41-5a;
+        }
+        @font-face{
+            font-family: 'Aileron'; 
+            font-weight: 400;
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Aileron-Regular.ttf);
+            unicode-range: U+61-7a;
+        }
+        
+        @font-face{
+            font-family: 'Aileron'; 
+            font-weight: 600;
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Roboto-Medium.ttf);  
+        }
+        @font-face{
+            font-family: 'Aileron'; 
+            font-weight: 600;
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Aileron-Medium.ttf);
+            unicode-range: U+41-5a;
+        }
+        @font-face{
+            font-family: 'Aileron'; 
+            font-weight: 600;
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Aileron-Medium.ttf);
+            unicode-range: U+61-7a;
+        }
+
+        @font-face{
+            font-family: 'Aileron'; 
+            font-weight: 700;
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Roboto-Bold.ttf);  
+        }
+        @font-face{
+            font-family: 'Aileron'; 
+            font-weight: 700;
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Aileron-Bold.ttf);
+            unicode-range: U+41-5a;
+        }
+        @font-face{
+            font-family: 'Aileron'; 
+            font-weight: 700;
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Aileron-Bold.ttf);
+            unicode-range: U+61-7a;
+        }
+    </style>
+        
+</head>
+<body class="text-center">
+    <div class="container">
+      <div class="page-header">
+          <h1 class="h3 mb-3 font-weight-normal">{{ titulo }}</h1>
+      </div>
+      {% block conteudo %} {% endblock %}
+    </div>
+        
+</body>
+</html>
