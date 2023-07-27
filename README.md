@@ -1,4 +1,4 @@
-# Estrutura básica Flask
+# Sistema de Gestão de Compras
 
 
 ## Configurações ⚙️
