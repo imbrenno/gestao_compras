@@ -2,6 +2,7 @@ from main.database.models.database import Database, select
 from flask import jsonify, Blueprint, abort, request, make_response, redirect, render_template, session
 from main.database.models.users_model import Users
 from main.utils.enums.users import GenderEnum
+from main.utils.utils import hash_password
 
 bp = Blueprint(
     "users",
@@ -22,12 +23,14 @@ class UsuarioCtrl:
             try:
                 data = request.form
                 print(data)
+                password = hash_password(data['password'])
+                print(password)
                 user = UsuarioCtrl.check_user_exist(data["user"])
                 if user is False:
                     if data:
                         usuario = Users(
                             user=data["user"],
-                            password=data["password"],
+                            password=password,
                             fullName=data["fullName"],
                             document=data["document"],
                             gender=data["gender"]

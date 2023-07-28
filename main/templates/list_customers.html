@@ -9,7 +9,7 @@
               <th scope="col">CNPJ</th>
               <th scope="col">Gestor da Carteira</th>
               <th scope="col">Ativo</th>
-              <th scope="col"></th>
+              <th scope="col">#</th>
 
             </tr>
           </thead>
@@ -21,16 +21,16 @@
         <td>{{ customers.walletManagerId }}</td>
         <td>{{ customers.active }}</td>
         <td>
-          <form action="#" method="get">
+          <form action="/update_customer/{{ customers.id }}" method="get">
               <input type="hidden" name="id" value="{{ customers.id }}">
-              <button type="submit">Editar</button>
+              <button class="btn btn-outline-warning" type="submit">Editar</button>
           </form>
       </td>
     </tr>
     {% endfor %}
 </table>
 <br>
-<a class="btn btn-primary btn-sm" href="../create_user" role="button">Cadastrar Cliente</a>
+<a class="btn btn-outline-primary" href="../create_customers" role="button">Cadastrar Cliente</a>
 {% endblock %}
 
 
