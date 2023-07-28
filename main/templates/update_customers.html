@@ -1,0 +1,55 @@
+{% extends "template.html" %}
+{% block conteudo%}
+<form action="/update_customer/{{ customers.id }}" method="post">
+    <fieldset>
+        <br>
+        <div class="form-group">
+            <label for="companyName">Razão Social</label>
+            <input type="text" id="companyName" name="companyName" class="form-control"
+                value="{{ customers.companyName }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="tradingName">Nome Fantasia</label>
+            <input type="text" id="tradingName" name="tradingName" class="form-control"
+                value="{{ customers.tradingName }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="vat">CNPJ</label>
+            <input type="text" id="vat" name="vat" class="form-control" value="{{ customers.vat }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="representative">Representante</label>
+            <input type="text" id="representative" name="representative" class="form-control"
+                value="{{ customers.representative }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="contact">Contato</label>
+            <input type="text" id="contact" name="contact" class="form-control" value="{{ customers.contact }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="address">Endereço</label>
+            <input type="text" id="address" name="address" class="form-control" value="{{ customers.address }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="walletManagerId">Gestor da Conta</label>
+            <input type="text" id="walletManagerId" name="walletManagerId" class="form-control"
+                value="{{ customers.walletManagerId }}">
+        </div>
+        <br />
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" name="active" role="switch" {% if customers.active
+                %}checked{% endif %}>
+            <label for="active">Ativo</label>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+    </fieldset>
+</form>
+
+{% endblock %}

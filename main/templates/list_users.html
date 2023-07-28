@@ -7,10 +7,8 @@
               <th scope="col">ID</th>
               <th scope="col">Nome Completo</th>
               <th scope="col">Usuário</th>
-              <th scope="col">Documento</th>
-              <th scope="col">Genêro</th>
               <th scope="col">Ativo</th>
-              <th scope="col"></th>
+              <th scope="col">#</th>
 
             </tr>
           </thead>
@@ -19,20 +17,18 @@
         <td>{{ users.id }}</td>
         <td>{{ users.fullName }}</td>
         <td>{{ users.user }}</td>
-        <td>{{ users.document }}</td>
-        <td>{{ users.gender }}</td>
         <td>{{ users.active }}</td>
         <td>
           <form action="/update_user/{{ users.id }}" method="get">
               <input type="hidden" name="id" value="{{ users.id }}">
-              <button type="submit">Editar</button>
+              <button class="btn btn-outline-warning" type="submit">Editar</button>
           </form>
       </td>
     </tr>
     {% endfor %}
 </table>
 <br>
-<a class="btn btn-primary btn-sm" href="../create_user" role="button">Criar Usuário</a>
+<a class="btn btn-outline-primary" href="../create_user" role="button">Criar Usuário</a>
 {% endblock %}
 
 

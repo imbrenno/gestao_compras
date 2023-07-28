@@ -11,7 +11,7 @@ class IndexCtrl:
     @bp.route("/")
     def inicial_template():
         print(session)
-        if session is not None:
+        if session:
             return render_template("index.html"
         )
 
