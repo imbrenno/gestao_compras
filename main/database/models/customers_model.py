@@ -9,7 +9,7 @@ class Customers(SQLModel, table=True):
     tradingName: Optional[str] = Field(unique=True)
     vat: str = Field(max_length=14, min_length=14, unique=True)
     representative: Optional[str] = None
-    contact: Optional[str]
-    address: Optional[str]
+    contact: Optional[str] = None
+    address: Optional[str] = None
     active: Optional[bool] = True
     walletManagerId: Optional[int] = Field(default=None, foreign_key="users.id")
