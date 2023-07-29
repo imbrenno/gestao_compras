@@ -2,6 +2,7 @@ from json import dumps
 from main.database.models.database import Database, select
 from flask import jsonify, Blueprint, abort, request, make_response, redirect, render_template, session
 from main.database.models.customers_model import Customers
+from main.utils.utils import encode_addrees
 
 
 bp = Blueprint(
@@ -29,8 +30,7 @@ class CustomerCtrl:
 
             try:
                 data = request.form
-                print(f'printou data: {data}')
-
+                addrees = data
                 if data:
                     customer = Customers(
                         companyName=data["companyName"],
@@ -38,7 +38,7 @@ class CustomerCtrl:
                         vat=data["vat"],
                         representative=data["representative"],
                         contact=data["contact"],
-                        address=data["address"],
+                        address=encode_addrees(addrees),
                         walletManagerId=data["walletManagerId"]
 
                     )
