@@ -14,7 +14,7 @@ bp = Blueprint(
 class UsuarioCtrl:
 
     @staticmethod
-    @bp.route('/create_user', methods=['POST', 'GET'])
+    @bp.route('/create-user', methods=['POST', 'GET'])
     def create_user():
         if session:
             if request.method == 'GET':
@@ -22,9 +22,7 @@ class UsuarioCtrl:
 
             try:
                 data = request.form
-                print(data)
                 password = hash_password(data['password'])
-                print(password)
                 user = UsuarioCtrl.check_user_exist(data["user"])
                 if user is False:
                     if data:
@@ -37,7 +35,7 @@ class UsuarioCtrl:
                         )
                         Database().save(usuario)
 
-                    return redirect('/list_users')
+                    return redirect('/list-users')
 
                 else:
                     return make_response(jsonify({"menssage": "Usuario ja existe"}), 409)
@@ -46,34 +44,32 @@ class UsuarioCtrl:
                 print(e)
                 return abort(400)
 
-        else:
-            return redirect('/login')
+        return redirect('/login')
         
         
-    @bp.route('/list_users')
+    @bp.route('/list-users')
     def users_all():
         if session:
             statement = select(Users)
             users = Database().get_all(statement)
             return render_template('list_users.html', users=users, titulo='Lista de Usuários')
-        else:
-            return redirect('/login')
+        
+        return redirect('/login')
         
 
-    @bp.route('/update_user/<id>', methods=['POST', 'GET'])
+    @bp.route('/update-user/<id>', methods=['POST', 'GET'])
     def update_user(id):
         if session:
             try:
                 if request.method == 'GET':
-                    statement_user = select(Users).where(Users.id == id)
-                    print('passou do statement')
-                    usuario: Users = Database().get_one(statement_user) 
-                    print('passou do usuario')
+                    statementUser = select(Users).where(Users.id == id)
+                    usuario: Users = Database().get_one(statementUser) 
+                    print(f'usuario: {usuario}')
                     return render_template('update_users.html', titulo='Editar Usuário', users=usuario)
 
                 
-                statement_user = select(Users).where(Users.id == id)
-                usuario: Users = Database().get_one(statement_user)
+                statementUser = select(Users).where(Users.id == id)
+                usuario: Users = Database().get_one(statementUser)
                 data = request.form
                 if data:
                     if data['gender'] == 'male':
@@ -85,18 +81,18 @@ class UsuarioCtrl:
                     else:
                         usuario.active = False
                     usuario.fullName = data["fullName"]
-                    usuario.password = data["password"]
+                    usuario.password = hash_password(data['password'])
                     usuario.document = data["document"]
                     Database().save(usuario)
 
-                    return redirect('/list_users')
+                    return redirect('/list-users')
 
             except Exception as e:
                 print(F'ERRO NO EXCEPTION {e}')
                 return abort(400)
         
-        else:
-            return make_response('Acesso negado', 401)
+        
+        return make_response('Acesso negado', 401)
         
 
     @staticmethod
@@ -108,7 +104,26 @@ class UsuarioCtrl:
         try:
             if usuario is None:
                 return False
-            else:
-                return True
+            
+            return True
         except:
             return abort(400)
+
+
+    @staticmethod
+    @bp.route('/create-admin-user', methods=['POST'])
+    def create_admin_user():
+        password = hash_password('senhapadrao@123')
+        print(password)
+        user = UsuarioCtrl.check_user_exist('admin@admin.com')
+        if user is False:
+            usuario = Users(
+                user='admin@admin.com',
+                password=password,
+                fullName='User Admin',
+                document='12345679821',
+                gender=GenderEnum.MALE
+            )
+            Database().save(usuario)
+        
+        return make_response('Sucesso', 200)

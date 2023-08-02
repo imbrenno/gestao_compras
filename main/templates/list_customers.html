@@ -21,7 +21,7 @@
         <td>{{ customers.walletManagerId }}</td>
         <td>{{ customers.active }}</td>
         <td>
-          <form action="/update_customer/{{ customers.id }}" method="get">
+          <form action="/update-customer/{{ customers.id }}" method="get">
               <input type="hidden" name="id" value="{{ customers.id }}">
               <button class="btn btn-outline-warning" type="submit">Editar</button>
           </form>
@@ -30,7 +30,7 @@
     {% endfor %}
 </table>
 <br>
-<a class="btn btn-outline-primary" href="../create_customers" role="button">Cadastrar Cliente</a>
+<a class="btn btn-outline-primary" href="../create-customers" role="button">Cadastrar Cliente</a>
 {% endblock %}
 
 

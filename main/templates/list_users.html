@@ -19,7 +19,7 @@
         <td>{{ users.user }}</td>
         <td>{{ users.active }}</td>
         <td>
-          <form action="/update_user/{{ users.id }}" method="get">
+          <form action="/update-user/{{ users.id }}" method="get">
               <input type="hidden" name="id" value="{{ users.id }}">
               <button class="btn btn-outline-warning" type="submit">Editar</button>
           </form>
@@ -28,7 +28,7 @@
     {% endfor %}
 </table>
 <br>
-<a class="btn btn-outline-primary" href="../create_user" role="button">Criar Usuário</a>
+<a class="btn btn-outline-primary" href="../create-user" role="button">Criar Usuário</a>
 {% endblock %}
 
 
