@@ -1,6 +1,8 @@
+from typing import Dict
 import bcrypt
 import base64
-from json import dumps
+from json import dumps, loads
+
 
 def hash_password(password: str) -> str:
     salt = bcrypt.gensalt()
@@ -12,9 +14,18 @@ def encode_str(data: str) -> str:
     data_encode = base64.b64encode(data.encode('utf-8')).decode('utf-8')
     return data_encode
 
+def decode_str(data: str) -> Dict:
+    data_decode = base64.b64decode(data).decode('utf-8')
+    return loads(data_decode)
+
+
+
 
 def encode_addrees(data: dict) -> str:
     addrees = dict()
+    if data['publicPlace'] is not '':
+        addrees['publicPlace'] = data['publicPlace']
+
     if data['street'] is not '':
         addrees['street'] = data['street']
 
@@ -45,3 +56,30 @@ def encode_addrees(data: dict) -> str:
         addrees = encode_str(addrees)
  
     return addrees
+
+
+def validate_password(plain_password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+
+
+def encode_contact(data: dict) -> str:
+    contact = dict()
+    
+
+    if data['telephone'] is not '':
+        contact['telephone'] = data['telephone']
+
+    if data['cell'] is not '':
+        contact['cell'] = data['cell']
+
+    if data['email'] is not '':
+        contact['email'] = data['email']
+
+    if len(contact) == 0:
+        contact = None
+    
+    else:
+        contact = dumps(contact)
+        contact = encode_str(contact)
+ 
+    return contact

@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 {% block conteudo%}
-<form action="/create_customers" method="post">
+<form action="/create-customers" method="post">
     <fieldset>
         <br>
         <div class="form-group">
@@ -24,18 +24,35 @@
         </div>
         <br />
         <div class="form-group">
-            <label for="contact">Contato</label>
-            <input type="text" id="contact" name="contact" class="form-control">
+            <label for="telephone">Telefone</label>
+            <input type="text" id="telephone" name="telephone" class="form-control">
         </div>
         <br />
         <div class="form-group">
-            <label for="street">Logradouro</label>
+            <label for="cell">Celular</label>
+            <input type="text" id="cell" name="cell" class="form-control">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="publicPlace">Logradouro</label>
+            <input type="text" id="publicPlace" name="publicPlace" class="form-control">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="street">Rua</label>
             <input type="text" id="street" name="street" class="form-control">
         </div>
+        <br />
         <div class="form-group">
             <label for="number">Numero</label>
             <input type="text" id="number" name="number" class="form-control">
         </div>
+        <br />
         <div class="form-group">
             <label for="complement">Complemento</label>
             <input type="text" id="complement" name="complement" class="form-control">

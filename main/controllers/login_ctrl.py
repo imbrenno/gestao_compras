@@ -1,6 +1,7 @@
 from main.database.models.database import Database, select
 from flask import abort, Blueprint, make_response, session, redirect, render_template,  request
 from main.database.models.users_model import Users
+from main.utils.utils import validate_password
 
 
 bp = Blueprint(
@@ -22,20 +23,23 @@ class LoginController:
             user_data = data['user']
             statement_user = select(Users).where(Users.user == user_data)
             usuario: Users =  Database().get_one(statement_user)
-            password = usuario.password
+            password_db = usuario.password
             user_active = usuario.active
 
-            if password == data['password']:
-               password = usuario.password        
-            else:
-                return redirect('/login')
-            
             if user_active == True:
+                print('checkd user')
                 session['user'] = data['user'] 
-                return redirect('/')
+            
+                if validate_password(data['password'], password_db ):
+                    print('Checked Password')
+                    return redirect('/')
+
+                else: 
+                    return redirect('/login')
+
             else:
                 return redirect('/login')
-            
+                        
         except Exception as e:
             print(e)
             return redirect('/login')

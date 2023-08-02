@@ -1,9 +1,10 @@
 from typing import Optional
 from sqlmodel import Field, SQLModel
+from main.utils.enums.supplier import SuplierPaymentTypesEnum
 
 
 
-class Customers(SQLModel, table=True):
+class Suppliers(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     companyName: str = Field(unique=True)
     tradingName: Optional[str] = Field(unique=True)
@@ -11,5 +12,7 @@ class Customers(SQLModel, table=True):
     representative: Optional[str] = None
     contact: Optional[str] = Field(max_length=1000, default=None)
     address: Optional[str] = Field(max_length=1000, default=None)
+    category: str
+    paymentTypes: Optional[SuplierPaymentTypesEnum] = None
     active: Optional[bool] = True
     walletManagerId: Optional[int] = Field(default=None, foreign_key="users.id")

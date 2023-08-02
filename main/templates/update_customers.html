@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 {% block conteudo%}
-<form action="/update_customer/{{ customers.id }}" method="post">
+<form action="/update-customer/{{ customers.id }}" method="post">
     <fieldset>
         <br>
         <div class="form-group">
@@ -27,14 +27,58 @@
         </div>
         <br />
         <div class="form-group">
-            <label for="contact">Contato</label>
-            <input type="text" id="contact" name="contact" class="form-control" value="{{ customers.contact }}">
+            <label for="telephone">Telefone</label>
+            <input type="text" id="telephone" name="telephone" class="form-control" value="{{ customerContact.telephone }}">
         </div>
         <br />
         <div class="form-group">
-            <label for="address">Endereço</label>
-            <input type="text" id="address" name="address" class="form-control" value="{{ customers.address }}">
+            <label for="cell">Celular</label>
+            <input type="text" id="cell" name="cell" class="form-control" value="{{ customerContact.cell }}">
         </div>
+        <br />
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ customerContact.email }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="publicPlace">Logradouro</label>
+            <input type="text" id="publicPlace" name="publicPlace" class="form-control" value="{{ customersAddrees.publicPlace }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="street">Rua</label>
+            <input type="text" id="street" name="street" class="form-control" value="{{ customersAddrees.street }}">
+        </div>
+        <div class="form-group">
+            <label for="number">Numero</label>
+            <input type="text" id="number" name="number" class="form-control" value="{{ customersAddrees.number }}">
+        </div>
+        <div class="form-group">
+            <label for="complement">Complemento</label>
+            <input type="text" id="complement" name="complement" class="form-control" value="{{ customersAddrees.complement }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="neighborhood">Bairro</label>
+            <input type="text" id="neighborhood" name="neighborhood" class="form-control" value="{{ customersAddrees.neighborhood }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="city">Cidade</label>
+            <input type="text" id="city" name="city" class="form-control" value="{{ customersAddrees.city }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="state">Estado</label>
+            <input type="text" id="state" name="state" class="form-control" value="{{ customersAddrees.state }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="zipCode">CEP</label>
+            <input type="text" id="zipCode" name="zipCode" class="form-control" value="{{ customersAddrees.zipCode }}">
+        </div>
+        <br />
         <br />
         <div class="form-group">
             <label for="walletManagerId">Gestor da Conta</label>
