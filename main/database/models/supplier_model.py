@@ -12,7 +12,7 @@ class Suppliers(SQLModel, table=True):
     representative: Optional[str] = None
     contact: Optional[str] = Field(max_length=1000, default=None)
     address: Optional[str] = Field(max_length=1000, default=None)
-    category: str
+    category: Optional[str] = None
     paymentTypes: Optional[SuplierPaymentTypesEnum] = None
     active: Optional[bool] = True
     walletManagerId: Optional[int] = Field(default=None, foreign_key="users.id")

@@ -29,10 +29,8 @@ class CustomerCtrl:
 
             try:
                 data = request.form
-                print(f'printando data create customer: {data}')
                 addrees = data
                 contact = data
-                print(addrees)
                 if data:
                     customer = Customers(
                         companyName=data["companyName"],

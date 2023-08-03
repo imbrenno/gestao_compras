@@ -1,6 +1,36 @@
 {% extends "template.html" %}
 {% block conteudo%}
+<br>
+<table class="table">
+        <thead class="thead-dark">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Razão Social</th>
+              <th scope="col">Cetegoria</th>
+              <th scope="col">Gestor da Carteira</th>
+              <th scope="col">Ativo</th>
+              <th scope="col">#</th>
 
+            </tr>
+          </thead>
+    {% for suppliers in suppliers %}
+    <tr>
+        <td>{{ suppliers.id }}</td>
+        <td>{{ suppliers.companyName }}</td>
+        <td>{{ suppliers.category }}</td>
+        <td>{{ suppliers.walletManagerId }}</td>
+        <td>{{ suppliers.active }}</td>
+        <td>
+          <form action="/update-supplier/{{ suppliers.id }}" method="get">
+              <input type="hidden" name="id" value="{{ suppliers.id }}">
+              <button class="btn btn-outline-warning" type="submit">Editar</button>
+          </form>
+      </td>
+    </tr>
+    {% endfor %}
+</table>
+<br>
+<a class="btn btn-outline-primary" href="../create-supplier" role="button">Cadastrar Fornecedor</a>
 {% endblock %}
 
 
