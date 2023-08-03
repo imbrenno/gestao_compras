@@ -1,0 +1,117 @@
+{% extends "template.html" %}
+{% block conteudo%}
+<form action="/update-supplier/{{ suppliers.id }}" method="post">
+    <fieldset>
+        <br>
+        <div class="form-group">
+            <label for="companyName">Razão Social</label>
+            <input type="text" id="companyName" name="companyName" class="form-control"
+                value="{{ suppliers.companyName }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="tradingName">Nome Fantasia</label>
+            <input type="text" id="tradingName" name="tradingName" class="form-control"
+                value="{{ suppliers.tradingName }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="vat">CNPJ</label>
+            <input type="text" id="vat" name="vat" class="form-control" value="{{ suppliers.vat }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="representative">Representante</label>
+            <input type="text" id="representative" name="representative" class="form-control"
+                value="{{ suppliers.representative }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="telephone">Telefone</label>
+            <input type="text" id="telephone" name="telephone" class="form-control" value="{{ supplierContact.telephone }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="cell">Celular</label>
+            <input type="text" id="cell" name="cell" class="form-control" value="{{ supplierContact.cell }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ supplierContact.email }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="publicPlace">Logradouro</label>
+            <input type="text" id="publicPlace" name="publicPlace" class="form-control" value="{{ suppliersAddrees.publicPlace }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="street">Rua</label>
+            <input type="text" id="street" name="street" class="form-control" value="{{ suppliersAddrees.street }}">
+        </div>
+        <div class="form-group">
+            <label for="number">Numero</label>
+            <input type="text" id="number" name="number" class="form-control" value="{{ suppliersAddrees.number }}">
+        </div>
+        <div class="form-group">
+            <label for="complement">Complemento</label>
+            <input type="text" id="complement" name="complement" class="form-control" value="{{ suppliersAddrees.complement }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="neighborhood">Bairro</label>
+            <input type="text" id="neighborhood" name="neighborhood" class="form-control" value="{{ suppliersAddrees.neighborhood }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="city">Cidade</label>
+            <input type="text" id="city" name="city" class="form-control" value="{{ suppliersAddrees.city }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="state">Estado</label>
+            <input type="text" id="state" name="state" class="form-control" value="{{ suppliersAddrees.state }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="zipCode">CEP</label>
+            <input type="text" id="zipCode" name="zipCode" class="form-control" value="{{ suppliersAddrees.zipCode }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="zipCode">CEP</label>
+            <input type="text" id="zipCode" name="zipCode" class="form-control" value="{{ suppliersAddrees.zipCode }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="category">Category</label>
+            <input type="text" id="category" name="category" class="form-control" value="{{ suppliersAddrees.category }}">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="paymentTypes">Tipos de Pagamento</label>
+            <select type="text" id="paymentTypes" name="paymentTypes" class="form-control" value="{{ suppliersAddrees.paymentTypes }}">
+            <option value="pix">Pix</option>
+            <option value="bill_payment">Boleto</option>
+            <option value="ted">TED</option>
+            <option value="card">Cartão</option>
+        </select>
+        <br />
+        <div class="form-group">
+            <label for="walletManagerId">Gestor da Conta</label>
+            <input type="text" id="walletManagerId" name="walletManagerId" class="form-control"
+                value="{{ suppliers.walletManagerId }}">
+        </div>
+        <br />
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" name="active" role="switch" {% if suppliers.active
+                %}checked{% endif %}>
+            <label for="active">Ativo</label>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+    </fieldset>
+</form>
+
+{% endblock %}
