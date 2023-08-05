@@ -20,6 +20,8 @@ class CustomerCtrl:
             customers = Database().get_all(statement_customers)
             return render_template('list_customers.html', customers=customers, titulo='Clientes')
         
+        return make_response('Access denied', 401)
+        
 
     @bp.route('/create-customers', methods=['GET', 'POST'])
     def create_user():
@@ -50,6 +52,8 @@ class CustomerCtrl:
             except Exception as e:
                 print(e)
                 return make_response('Bad Request', 400)
+
+        return make_response('Access denied', 401)    
 
 
     @bp.route('/update-customer/<id>', methods=['POST', 'GET'])
@@ -96,5 +100,24 @@ class CustomerCtrl:
                 print(e)
                 return abort(400)
         
-        else:
-            return make_response('Acesso negado', 401)
+
+        return make_response('Access denied', 401)
+    
+
+    @bp.route('/delete-customer/<id>', methods=['POST'])
+    def delete_customer(id):
+        if session:
+
+            try:
+                statement_customer = select(Customers).where(Customers.id == id)
+                customer : Customers = Database().get_one(statement_customer)
+                print('Checking user')
+                if customer:
+                    Database().delete(customer)
+                    print(f'User deleted: {customer}')
+                    return redirect('/list-customers')
+                
+            except Exception as e:
+                return make_response(f'Exception deleted user: {e}', 400)
+                
+        return make_response('Access denied', 401)

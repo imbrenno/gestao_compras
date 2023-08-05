@@ -20,7 +20,8 @@ class SuppliersCtrl:
             statement_supplier = select(Suppliers)
             suppliers = Database().get_all(statement_supplier)
             return render_template('list_suppliers.html', titulo='Lista de Fornecedores', suppliers=suppliers)
-        
+
+        return make_response('Access Denied', 401)
     
     @bp.route('/create-supplier', methods=['POST', 'GET'])
     def create_supplier():
@@ -53,7 +54,7 @@ class SuppliersCtrl:
                 print(f'Erro ao criar supplier {e}')
                 return abort(400)
         else:
-            return make_response('Acesso Negado', 401)
+            return make_response('Access Denied', 401)
 
 
 
@@ -90,12 +91,31 @@ class SuppliersCtrl:
 
 
                     Database().save(supplier)
-
                     return redirect('/list-suppliers')
-
+                
+                return abort(400)
             except Exception as e:
                 print(e)
                 return abort(400)
         
-        else:
-            return make_response('Acesso negado', 401)
+        return make_response('Access Denied', 401)
+        
+
+    @bp.route('/delete-supplier/<id>', methods=['POST'])
+    def delete_supplier(id):
+        if session:
+            try:    
+                statement_supplier = select(Suppliers).where(Suppliers.id == id)
+                supplier : Suppliers = Database().get_one(statement_supplier)
+                print(f'Supplier para deletar: {supplier}')
+                if supplier:
+                    Database().delete(supplier)
+                    return redirect('/list-suppliers')
+                
+                return make_response('Supplier not found', 404)
+            
+            except Exception as e:
+                print(f'Exception delet supplier: {e}')
+                return abort(400)
+            
+        return make_response('Access Denied', 401)

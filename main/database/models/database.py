@@ -31,3 +31,10 @@ class Database:
         with Session(engine) as session:
             session.add(object_model)
             session.commit()
+
+
+    def delete(self, object_model: Any):
+        with Session(engine) as session:
+            session.delete(object_model)
+            session.commit()
+
