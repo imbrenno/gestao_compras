@@ -91,8 +91,7 @@ class UsuarioCtrl:
                 print(F'ERRO NO EXCEPTION {e}')
                 return abort(400)
         
-        
-        return make_response('Acesso negado', 401)
+        return make_response('Accesso denied', 401)
         
 
     @staticmethod
@@ -124,6 +123,23 @@ class UsuarioCtrl:
                 document='12345679821',
                 gender=GenderEnum.MALE
             )
-            Database().save(usuario)
-        
-        return make_response('Sucesso', 200)
+            Database().save(usuario)        
+            return make_response('Sucesso', 200)
+
+
+    @bp.route('/delete-user/<id>', methods=['POST'])
+    def delete_user(id):
+        if session:
+            try:
+                statement_user = select(Users).where(Users.id == id)
+                user : Users = Database().get_one(statement_user)
+                print('Checking user')
+                if user:
+                    Database().delete(user)
+                    print(f'User deleted: {user}')
+                    return redirect('/list-users')
+                
+            except Exception as e:
+                return make_response(f'Exception deleted user: {e}', 400)
+                
+        return make_response('Access denied', 401)

@@ -2,33 +2,37 @@
 {% block conteudo%}
 <br>
 <table class="table">
-        <thead class="thead-dark">
-            <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Nome Completo</th>
-              <th scope="col">Usuário</th>
-              <th scope="col">Ativo</th>
-              <th scope="col">#</th>
-
-            </tr>
-          </thead>
-    {% for users in users %}
+  <thead class="thead-dark">
     <tr>
-        <td>{{ users.id }}</td>
-        <td>{{ users.fullName }}</td>
-        <td>{{ users.user }}</td>
-        <td>{{ users.active }}</td>
-        <td>
-          <form action="/update-user/{{ users.id }}" method="get">
-              <input type="hidden" name="id" value="{{ users.id }}">
-              <button class="btn btn-outline-warning" type="submit">Editar</button>
-          </form>
-      </td>
+      <th scope="col">ID</th>
+      <th scope="col">Nome Completo</th>
+      <th scope="col">Usuário</th>
+      <th scope="col">Ativo</th>
+      <th scope="col">#</th>
+      <th scope="col">#</th>
+
     </tr>
-    {% endfor %}
+  </thead>
+  {% for users in users %}
+  <tr>
+    <td>{{ users.id }}</td>
+    <td>{{ users.fullName }}</td>
+    <td>{{ users.user }}</td>
+    <td>{{ users.active }}</td>
+    <td>
+      <form action="/update-user/{{ users.id }}" method="get">
+        <input type="hidden" name="id" value="{{ users.id }}">
+        <button class="btn btn-outline-warning" type="submit">Editar</button>
+      </form>
+    <td>
+      <form action="../delete-user/{{ users.id }}" method="post">
+        <input type="hidden" name="id" value="{{ users.id }}">
+        <button class="btn btn-outline-danger" type="submit">Deletar</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
 </table>
 <br>
 <a class="btn btn-outline-primary" href="../create-user" role="button">Criar Usuário</a>
 {% endblock %}
-
-
