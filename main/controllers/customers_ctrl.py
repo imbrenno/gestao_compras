@@ -1,5 +1,14 @@
 from main.database.models.database import Database, select
-from flask import jsonify, Blueprint, abort, request, make_response, redirect, render_template, session
+from flask import (
+    jsonify,
+    Blueprint,
+    abort,
+    request,
+    make_response,
+    redirect,
+    render_template,
+    session,
+)
 from main.database.models.customers_model import Customers
 from main.utils.utils import decode_str, encode_addrees, encode_contact
 
@@ -12,55 +21,55 @@ bp = Blueprint(
 
 
 class CustomerCtrl:
-
-    @bp.route('/list-customers')
+    @bp.route("/list-customers")
     def customers_all():
         if session:
             statement_customers = select(Customers)
             customers = Database().get_all(statement_customers)
-            return render_template('list_customers.html', customers=customers, titulo='Clientes')
-        
-        return make_response('Access denied', 401)
-        
+            return render_template(
+                "list_customers.html", customers=customers, titulo="Clientes"
+            )
 
-    @bp.route('/create-customers', methods=['GET', 'POST'])
+        return make_response("Access denied", 401)
+
+    @bp.route("/create-customers", methods=["GET", "POST"])
     def create_user():
         if session:
-            if request.method == 'GET':
-                return render_template('create_customer.html', titulo='Cadastrar Novo Cliente')
+            if request.method == "GET":
+                return render_template(
+                    "create_customer.html", titulo="Cadastrar Novo Cliente"
+                )
 
             try:
                 data = request.form
-                addrees = data
-                contact = data
                 if data:
                     customer = Customers(
                         companyName=data["companyName"],
                         tradingName=data["tradingName"],
                         vat=data["vat"],
                         representative=data["representative"],
-                        contact=encode_contact(contact),
-                        address=encode_addrees(addrees),
-                        walletManagerId=data["walletManagerId"]
-
+                        contact=encode_contact(data),
+                        address=encode_addrees(data),
+                        walletManagerId=data["walletManagerId"],
                     )
                     Database().save(customer)
-                    return redirect('/list-customers')
+                    return redirect("/list-customers")
 
                 else:
-                    return make_response(jsonify({"menssage": "Cliente ja existe"}), 409)
+                    return make_response(
+                        jsonify({"menssage": "Cliente ja existe"}), 409
+                    )
             except Exception as e:
                 print(e)
-                return make_response('Bad Request', 400)
+                return make_response("Bad Request", 400)
 
-        return make_response('Access denied', 401)    
+        return make_response("Access denied", 401)
 
-
-    @bp.route('/update-customer/<id>', methods=['POST', 'GET'])
+    @bp.route("/update-customer/<id>", methods=["POST", "GET"])
     def update_user(id):
         if session:
             try:
-                if request.method == 'GET':
+                if request.method == "GET":
                     statementCustomer = select(Customers).where(Customers.id == id)
                     customer: Customers = Database().get_one(statementCustomer)
                     customerAddrees = decode_str(customer.address)
@@ -68,10 +77,15 @@ class CustomerCtrl:
                     print(f'printando rua: {customerAddrees["street"]}')
                     print(f'printando rua: {customerContact["cell"]}')
 
-                    print(f'passou do customer: {customerAddrees}')
-                    return render_template('update_customers.html', titulo='Editar Cliente', customers=customer, customersAddrees=customerAddrees, customerContact=customerContact)
+                    print(f"passou do customer: {customerAddrees}")
+                    return render_template(
+                        "update_customers.html",
+                        titulo="Editar Cliente",
+                        customers=customer,
+                        customersAddrees=customerAddrees,
+                        customerContact=customerContact,
+                    )
 
-                
                 statementCustomer = select(Customers).where(Customers.id == id)
                 customer: Customers = Database().get_one(statementCustomer)
 
@@ -79,7 +93,7 @@ class CustomerCtrl:
                 addrees = data
                 contact = data
                 if data:
-                    if data.get('active'):
+                    if data.get("active"):
                         customer.active = True
                     else:
                         customer.active = False
@@ -91,33 +105,29 @@ class CustomerCtrl:
                     customer.address = encode_addrees(addrees)
                     customer.walletManagerId = data["walletManagerId"]
 
-
                     Database().save(customer)
 
-                    return redirect('/list-customers')
+                    return redirect("/list-customers")
 
             except Exception as e:
                 print(e)
                 return abort(400)
-        
 
-        return make_response('Access denied', 401)
-    
+        return make_response("Access denied", 401)
 
-    @bp.route('/delete-customer/<id>', methods=['POST'])
+    @bp.route("/delete-customer/<id>", methods=["POST"])
     def delete_customer(id):
         if session:
-
             try:
                 statement_customer = select(Customers).where(Customers.id == id)
-                customer : Customers = Database().get_one(statement_customer)
-                print('Checking user')
+                customer: Customers = Database().get_one(statement_customer)
+                print("Checking user")
                 if customer:
                     Database().delete(customer)
-                    print(f'User deleted: {customer}')
-                    return redirect('/list-customers')
-                
+                    print(f"User deleted: {customer}")
+                    return redirect("/list-customers")
+
             except Exception as e:
-                return make_response(f'Exception deleted user: {e}', 400)
-                
-        return make_response('Access denied', 401)
+                return make_response(f"Exception deleted user: {e}", 400)
+
+        return make_response("Access denied", 401)

@@ -17,7 +17,7 @@ app.config.from_mapping(
     SESSION_TYPE="filesystem",
     JSONIFY_PRETTYPRINT_REGULAR=False,
 )
-app.config['JSON_SORT_KEYS'] = False
+app.config["JSON_SORT_KEYS"] = False
 # add routes
 for bp in blueprints_ctrl:
     app.register_blueprint(bp)

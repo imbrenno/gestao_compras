@@ -1,5 +1,13 @@
 from main.database.models.database import Database, select
-from flask import abort, Blueprint, make_response, session, redirect, render_template,  request
+from flask import (
+    abort,
+    Blueprint,
+    make_response,
+    session,
+    redirect,
+    render_template,
+    request,
+)
 from main.database.models.users_model import Users
 from main.utils.utils import validate_password
 
@@ -12,40 +20,39 @@ bp = Blueprint(
 
 
 class LoginController:
-  
-    @bp.route('/login', methods=['POST', 'GET'])
+    @bp.route("/login", methods=["POST", "GET"])
     def sigin():
-        if request.method == 'GET':
-            return render_template('login.html', titulo='Faça Login')
+        if request.method == "GET":
+            return render_template("login.html", titulo="Faça Login")
 
         try:
             data = request.form
-            user_data = data['user']
+            user_data = data["user"]
             statement_user = select(Users).where(Users.user == user_data)
-            usuario: Users =  Database().get_one(statement_user)
+            usuario: Users = Database().get_one(statement_user)
             password_db = usuario.password
             user_active = usuario.active
 
             if user_active == True:
-                print('checkd user')
-                session['user'] = data['user'] 
-            
-                if validate_password(data['password'], password_db ):
-                    print('Checked Password')
-                    return redirect('/')
+                print("checkd user")
+                session["user"] = data["user"]
 
-                else: 
-                    return redirect('/login')
+                if validate_password(data["password"], password_db):
+                    print("Checked Password")
+                    return redirect("/")
+
+                else:
+                    return redirect("/login")
 
             else:
-                return redirect('/login')
-                        
+                return redirect("/login")
+
         except Exception as e:
             print(e)
-            return redirect('/login')
+            return redirect("/login")
 
-    @bp.route('/logout')
+    @bp.route("/logout")
     def sigout():
-        session.pop('user', None)
+        session.pop("user", None)
         print(session)
-        return redirect('/login')
+        return redirect("/login")
