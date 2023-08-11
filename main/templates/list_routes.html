@@ -1,0 +1,35 @@
+{% extends "template.html" %}
+{% block conteudo%}
+<br>
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Nome</th>
+      <th scope="col">Rota</th>
+      <th scope="col"></th>
+      
+
+      
+
+    </tr>
+  </thead>
+  {% for routes in routes %}
+  <tr>
+    <td>{{ routes.id }}</td>
+    <td>{{ routes.routeName }}</td>
+    <td>{{ routes.route }}</td>
+    <td>
+      <form action="../delete-supplier/{{ routes.id }}" method="post">
+        <input type="hidden" name="id" value="{{ routes.id }}">
+        <button class="btn btn-outline-danger" type="submit">Deletar</button>
+      </form>
+    </td>
+
+  </tr>
+  {% endfor %}
+</table>
+<br>
+<!-- <a class="btn btn-outline-primary" href="../create-supplier" role="button">Cadastrar Fornecedor</a> -->
+
+{% endblock %}

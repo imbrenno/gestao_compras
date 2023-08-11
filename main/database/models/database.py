@@ -16,25 +16,20 @@ class Database:
     def __init__(self) -> None:
         self._result = Any
 
-
     def get_one(self, statement):
         with Session(engine) as session:
             return session.exec(statement).first()
-    
-    
+
     def get_all(self, statement):
         with Session(engine) as session:
-            return session.exec(statement).all() 
-
+            return session.exec(statement).all()
 
     def save(self, object_model: Any):
         with Session(engine) as session:
             session.add(object_model)
             session.commit()
 
-
     def delete(self, object_model: Any):
         with Session(engine) as session:
             session.delete(object_model)
             session.commit()
-

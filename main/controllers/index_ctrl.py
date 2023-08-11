@@ -12,8 +12,7 @@ class IndexCtrl:
     def inicial_template():
         print(session)
         if session:
-            return render_template("index.html"
-        )
+            return render_template("index.html")
 
         else:
-            return redirect('/login')
+            return redirect("/login")
