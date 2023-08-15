@@ -1,4 +1,5 @@
 from main.database.models.database import Database, select
+import json
 from flask import (
     jsonify,
     Blueprint,
@@ -61,8 +62,23 @@ class UsuarioCtrl:
         if session:
             statement = select(Users)
             users = Database().get_all(statement)
+            users_json = []
+            for user in users:
+                users_json.append(
+                    {
+                        "id": user.id,
+                        "user": user.user,
+                        "userGroupId": user.userGroupId,
+                        "fullName": user.fullName,
+                        "document": user.document,
+                        "active": user.active,
+                        "userGroupId": user.userGroupId,
+                    }
+                )
             return render_template(
-                "list_users.html", users=users, titulo="Lista de Usuários"
+                "list_users.html",
+                dados=json.dumps(users_json),
+                titulo="Lista de Usuários",
             )
 
         return redirect("/login")
@@ -74,7 +90,6 @@ class UsuarioCtrl:
                 if request.method == "GET":
                     statementUser = select(Users).where(Users.id == id)
                     usuario: Users = Database().get_one(statementUser)
-                    print(f"usuario: {usuario}")
                     return render_template(
                         "update_users.html", titulo="Editar Usuário", users=usuario
                     )
@@ -94,6 +109,7 @@ class UsuarioCtrl:
                     usuario.fullName = data["fullName"]
                     usuario.password = hash_password(data["password"])
                     usuario.document = data["document"]
+                    usuario.userGroupId = data["userGroupId"]
                     Database().save(usuario)
 
                     return redirect("/list-users")
@@ -121,7 +137,6 @@ class UsuarioCtrl:
     @bp.route("/create-admin-user", methods=["POST"])
     def create_admin_user():
         password = hash_password("senhapadrao@123")
-        print(password)
         user = UsuarioCtrl.check_user_exist("admin@admin.com")
         if user is False:
             usuario = Users(
@@ -134,7 +149,7 @@ class UsuarioCtrl:
             Database().save(usuario)
             return make_response("Sucesso", 200)
 
-    @bp.route("/delete-user/<id>", methods=["POST"])
+    @bp.route("/delete-user/<id>")
     def delete_user(id):
         if session:
             try:

@@ -11,3 +11,4 @@ class Users(SQLModel, table=True):
     document: str = Field(max_length=14, min_length=11, unique=True)
     active: Optional[bool] = True
     gender: Optional[GenderEnum] = None
+    userGroupId: Optional[str] 

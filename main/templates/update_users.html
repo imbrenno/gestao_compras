@@ -33,6 +33,11 @@
         <input type="password" id="password" name="password" class="form-control" value="{{ users.password }}">
       </div>
       <br />
+      <div class="form-group">
+        <label for="userGroupId">Grupo</label>
+        <input type="text" id="userGroupId" name="userGroupId" class="form-control" value="{{ users.userGroupId }}">
+      </div>
+      <br />
       <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" name="active" role="switch" {% if users.active %}checked{% endif %}>
           <label for="active">Ativo</label>
