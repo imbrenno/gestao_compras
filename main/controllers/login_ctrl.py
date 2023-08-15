@@ -27,32 +27,26 @@ class LoginController:
 
         try:
             data = request.form
-            user_data = data["user"]
-            statement_user = select(Users).where(Users.user == user_data)
+            statement_user = select(Users).where(Users.user == data["user"])
             usuario: Users = Database().get_one(statement_user)
-            password_db = usuario.password
-            user_active = usuario.active
-
-            if user_active == True:
-                print("checkd user")
+            print("Checking user")
+            if usuario.active:
+                print("Checking user: Active user")
                 session["user"] = data["user"]
 
-                if validate_password(data["password"], password_db):
+                if validate_password(data["password"], usuario.password):
                     print("Checked Password")
                     return redirect("/")
-
-                else:
-                    return redirect("/login")
-
-            else:
+                print("Checking user: Username or password is invalid")
                 return redirect("/login")
+            print("Checking user: Disabled user")
+            return redirect("/login")
 
         except Exception as e:
             print(e)
             return redirect("/login")
 
     @bp.route("/logout")
-    def sigout():
+    def signout():
         session.pop("user", None)
-        print(session)
         return redirect("/login")
