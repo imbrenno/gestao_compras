@@ -21,18 +21,15 @@ bp = Blueprint(
 )
 
 
-class UsuarioCtrl:
+class UserCtrl:
     @staticmethod
     @bp.route("/create-user", methods=["POST", "GET"])
     def create_user():
         if session:
-            if request.method == "GET":
-                return render_template("create_user.html", titulo="Novo Usuário")
-
             try:
                 data = request.form
                 password = hash_password(data["password"])
-                user = UsuarioCtrl.check_user_exist(data["user"])
+                user = UserCtrl.check_user_exist(data["user"])
                 if user is False:
                     if data:
                         usuario = Users(
@@ -41,6 +38,7 @@ class UsuarioCtrl:
                             fullName=data["fullName"],
                             document=data["document"],
                             gender=data["gender"],
+                            userGroupId=data["userGroupId"]
                         )
                         Database().save(usuario)
 
@@ -50,7 +48,6 @@ class UsuarioCtrl:
                     return make_response(
                         jsonify({"menssage": "Usuario ja existe"}), 409
                     )
-
             except Exception as e:
                 print(e)
                 return abort(400)
@@ -58,7 +55,7 @@ class UsuarioCtrl:
         return redirect("/login")
 
     @bp.route("/list-users")
-    def users_all():
+    def get_all_users():
         if session:
             statement = select(Users)
             users = Database().get_all(statement)
@@ -72,7 +69,7 @@ class UsuarioCtrl:
                         "fullName": user.fullName,
                         "document": user.document,
                         "active": user.active,
-                        "userGroupId": user.userGroupId,
+                        "gender": str(user.gender),
                     }
                 )
             return render_template(
@@ -97,6 +94,7 @@ class UsuarioCtrl:
                 statementUser = select(Users).where(Users.id == id)
                 usuario: Users = Database().get_one(statementUser)
                 data = request.form
+                print(f"data recebido na request: {data}")
                 if data:
                     if data["gender"] == "male":
                         usuario.gender = GenderEnum.MALE
@@ -110,6 +108,7 @@ class UsuarioCtrl:
                     usuario.password = hash_password(data["password"])
                     usuario.document = data["document"]
                     usuario.userGroupId = data["userGroupId"]
+                    usuario.user = data["user"]
                     Database().save(usuario)
 
                     return redirect("/list-users")
@@ -137,7 +136,7 @@ class UsuarioCtrl:
     @bp.route("/create-admin-user", methods=["POST"])
     def create_admin_user():
         password = hash_password("senhapadrao@123")
-        user = UsuarioCtrl.check_user_exist("admin@admin.com")
+        user = UserCtrl.check_user_exist("admin@admin.com")
         if user is False:
             usuario = Users(
                 user="admin@admin.com",
@@ -145,6 +144,7 @@ class UsuarioCtrl:
                 fullName="User Admin",
                 document="12345679821",
                 gender=GenderEnum.MALE,
+                userGroupId="administrator"
             )
             Database().save(usuario)
             return make_response("Sucesso", 200)

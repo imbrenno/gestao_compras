@@ -1,7 +1,8 @@
 {% extends "template.html" %}
 {% block conteudo%}
 <div id="list-users"></div>
-<!-- Modal -->
+
+<!-- Modal de Edição -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
     <div class="modal-content">
@@ -10,69 +11,64 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- Formulário de edição do usuário -->
-        <form class="row g-3" action="/update-user/" method="post">
+        <form id="editForm" method="post">
+          <input type="hidden" id="userId" name="userId">
           <legend>Dados Pessoais</legend>
           <div class="col-md-6">
             <label for="fullName">Nome Completo</label>
             <input type="text" id="fullName" name="fullName" class="form-control">
           </div>
-          <br />
           <div class="col-md-4">
             <label for="document">Documento</label>
             <input type="text" id="document" name="document" class="form-control">
           </div>
-          <!-- <br />
-          <div class="form-group">
+          <div class="col-md-4">
             <label for="gender">Gênero</label>
             <select type="text" id="gender" name="gender" class="form-control">
               <option value="male">Masculino</option>
               <option value="female">Feminino</option>
             </select>
-          </div> -->
-          <br />
+          </div>
+          <!-- TODO: incrementar após criação do endpoint create group -->
+          <div class="col-md-2">
+            <label for="userGroupId">Grupo</label>
+            <input type="text" id="userGroupId" name="userGroupId" class="form-control">
+          </div>
           <legend>Dados de Login</legend>
           <div class="col-md-5">
             <label for="user">Usuário</label>
             <input type="email" id="user" name="user" class="form-control">
           </div>
-          <br />
           <div class="col-md-5">
             <label for="password">Senha</label>
             <input type="password" id="password" name="password" class="form-control">
           </div>
-          <br />
-          <div cclass="col-md-2">
-            <label for="userGroupId">Grupo</label>
-            <input type="text" id="userGroupId" name="userGroupId" class="form-control">
+          <!-- TODO: exebir o check ativado quando o ative é True e desativado quando false-->
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" name="active" role="switch" {% if dados.active %}checked{%
+              endif %}>
+            <label for="active">Status</label>
           </div>
-          <br />
-          <!-- <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" name="active" role="switch">
-            <label for="active">Ativo</label>
-           </div>  -->
-          <!-- Adicione mais campos conforme necessário -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            <button type="submit" class="btn btn-primary">Alterar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
           </div>
         </form>
       </div>
-
     </div>
   </div>
 </div>
 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">
   Criar Usuário
 </button>
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+<!-- Modal de Criação de Usuário -->
+<div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Novo Usuário</h1>
+        <h1 class="modal-title fs-5" id="createUserModalLabel">Novo Usuário</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -82,103 +78,104 @@
             <label for="fullName">Nome Completo</label>
             <input type="text" id="fullName" name="fullName" class="form-control">
           </div>
-          <br />
-          <div class="col-md-4">
+          <div class="col-md-6">
             <label for="document">Documento</label>
             <input type="text" id="document" name="document" class="form-control">
           </div>
-          <br />
-          <div class="col-md-2">
+          <div class="col-md-3">
             <label for="gender">Gênero</label>
             <select type="text" id="gender" name="gender" class="form-control">
               <option value="male">Masculino</option>
               <option value="female">Feminino</option>
             </select>
           </div>
-          <br />
+          <!-- <div class="col-md-3">
+            <label for="userGroupId">Grupo</label>
+            <input type="text" id="userGroupId" name="userGroupId" class="form-control">
+          </div> -->
           <legend>Dados de Login</legend>
-          <div class="col-md-6">
+          <div class="col-md-5">
             <label for="user">Usuário</label>
             <input type="email" id="user" name="user" class="form-control">
           </div>
-          <br />
-          <div class="col-md-6">
+          <div class="col-md-5">
             <label for="password">Senha</label>
             <input type="password" id="password" name="password" class="form-control">
           </div>
-          <br />
-          <div class="col-md-4">
-            <label for="userGroupId">Grupo</label>
-            <input type="text" id="userGroupId" name="userGroupId" class="form-control">
-          </div>
-          <br />
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             <button type="submit" class="btn btn-primary">Salvar</button>
           </div>
         </form>
       </div>
-
     </div>
   </div>
 </div>
-<div id="dvDados" style="display: none;"> {{ dados }}</div>
+
+<div id="dvDados" style="display: none;">{{ dados }}</div>
 <script src="{{ url_for('static', filename='tabulator/js/tabulator.min.js') }}"></script>
 <link href="{{ url_for('static', filename='tabulator/css/tabulator_bootstrap4.css') }}" rel="stylesheet">
 <script>
-  console.log(JSON.parse(document.getElementById('dvDados').textContent))
-  var table = new Tabulator("#list-users", {
-    data: (JSON.parse(document.getElementById('dvDados').textContent)),
-    height: "311px",
-    layout: "fitColumns",
-    columns: [
-      { title: "ID", field: "id", width: 70, headerFilter: "input" },
-      { title: "Usuário", field: "user", width: 200, headerFilter: "input" },
-      { title: "Grupo", field: "userGroupId", width: 200, headerFilter: "input" },
-      { title: "Status", field: "active", width: 150, headerFilter: "input" },
-      { title: "Ação", field: "actions", formatter: editButtonFormatter },
-      { title: "Ação", field: "actions", formatter: deleteButtonFormatter },
-    ],
-  });
-
-  function editButtonFormatter(cell, formatterParams, onRendered) {
-    var editButton = document.createElement("button");
-    editButton.className = "btn btn-outline-warning btn-sm";
-    editButton.textContent = "Editar";
-
-    var rowData = cell.getRow().getData();
-
-    editButton.addEventListener("click", function () {
-      openEditModal(rowData);
+  document.addEventListener("DOMContentLoaded", function () {
+    var table = new Tabulator("#list-users", {
+      data: JSON.parse(document.getElementById('dvDados').textContent),
+      height: "311px",
+      layout: "fitColumns",
+      columns: [
+        { title: "ID", field: "id", width: 70, headerFilter: true },
+        { title: "Usuário", field: "user", width: 200, headerFilter: true },
+        { title: "Grupo", field: "userGroupId", width: 200, headerFilter: true },
+        { title: "Status", field: "active", width: 150, headerFilter: true },
+        { title: "Ação", formatter: editButtonFormatter, width: 100, hozAlign: "center" },
+        { title: "Ação", formatter: deleteButtonFormatter, width: 100, hozAlign: "center" },
+      ],
     });
 
-    return editButton;
-  }
+    function editButtonFormatter(cell, formatterParams, onRendered) {
+      var editButton = document.createElement("button");
+      editButton.className = "btn btn-outline-warning btn-sm";
+      editButton.textContent = "Editar";
 
-  function openEditModal(data) {
-    var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+      var rowData = cell.getRow().getData();
+      editButton.addEventListener("click", function () {
+        openEditModal(rowData);
+      });
+      
+      return editButton;
+    }
 
-    // Preencha o modal de edição com os dados
-    document.getElementById('fullName').value = data.fullName;
-    document.getElementById('document').value = data.document;
-    document.getElementById('gender').value = data.gender;
-    document.getElementById('user').value = data.user;
-    document.getElementById('password').value = data.password;
-    document.getElementById('userGroupId').value = data.userGroupId;
-    // document.getElementById('active').value = data.active;
 
-    editModal.show();
-  }
+    function openEditModal(data) {
+      var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+      let editForm = document.getElementById("editForm");
+      
+      editForm.setAttribute('action', '/update-user/' + data.id);
+      document.getElementById('userId').value = data.id;
+      document.getElementById('fullName').value = data.fullName;
+      document.getElementById('document').value = data.document;
+      document.getElementById('gender').value = data.gender;
+      document.getElementById('userGroupId').value = data.userGroupId;
+      document.getElementById('user').value = data.user;
+      document.getElementById('password').value = data.password;
+      // TODO: Enviar o status do usuário
+      // document.getElementById('active').value = data.active;
 
-  function deleteButtonFormatter(cell, formatterParams, onRendered) {
-    var deleteButton = document.createElement("button");
-    deleteButton.className = "btn btn-outline-danger btn-sm";
-    deleteButton.textContent = "Deletar";
-    let id = cell.getRow().getData().id
-    deleteButton.target = '_blank'
-    deleteButton.href = '/delete-user/' + id
-    return deleteButton
 
-  }
+      editModal.show();
+    }
+
+    function deleteButtonFormatter(cell, formatterParams, onRendered) {
+      var deleteButton = document.createElement("button");
+      deleteButton.className = "btn btn-outline-danger btn-sm";
+      deleteButton.textContent = "Deletar";
+      var rowData = cell.getRow().getData();
+      deleteButton.addEventListener("click", function () {
+        if (confirm("Tem certeza que deseja deletar o usuário?")) {
+          window.location.href = '/delete-user/' + rowData.id;
+        }
+      });
+      return deleteButton;
+    }
+  });
 </script>
 {% endblock %}
