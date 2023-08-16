@@ -1,0 +1,91 @@
+{% extends "template.html" %}
+{% block conteudo%}
+<div id="list-groups"></div>
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createGroupModal">
+  Criar Grupo
+</button>
+
+<!-- Modal de Criação de Usuário -->
+<div class="modal fade" id="createGroupModal" tabindex="-1" aria-labelledby="createGroupModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="createGroupModalLabel">Novo Grupo</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/create-group" method="post" class="row g-3">
+          <div class="col-md-6">
+            <label for="groupName">Nome do Grupo</label>
+            <input type="text" id="groupName" name="groupName" class="form-control">
+          </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="dvDados" style="display: none;">{{ groups }}</div>
+<script src="{{ url_for('static', filename='tabulator/js/tabulator.min.js') }}"></script>
+<link href="{{ url_for('static', filename='tabulator/css/tabulator_bootstrap4.css') }}" rel="stylesheet">
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var table = new Tabulator("#list-groups", {
+      data: JSON.parse(document.getElementById('dvDados').textContent),
+      height: "311px",
+      layout: "fitColumns",
+      columns: [
+        { title: "ID", field: "id", width: 70, headerFilter: true },
+        { title: "Grupo", field: "groupName", width: 200, headerFilter: true },
+        { title: "Status", field: "active", width: 200, headerFilter: true },
+        { title: "", formatter: editButtonFormatter, width: 100, hozAlign: "center" },
+        { title: "", formatter: deleteButtonFormatter, width: 100, hozAlign: "center" },
+      ],
+    });
+
+    function editButtonFormatter(cell, formatterParams, onRendered) {
+      var editButton = document.createElement("button");
+      editButton.className = "btn btn-outline-warning btn-sm";
+      editButton.textContent = "Editar";
+
+      var rowData = cell.getRow().getData();
+      editButton.addEventListener("click", function () {
+        openEditModal(rowData);
+      });
+      
+      return editButton;
+    }
+
+
+    function openEditModal(data) {
+      var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+      let editForm = document.getElementById("editForm");
+      
+      editForm.setAttribute('action', '/update-group/' + data.id);
+      document.getElementById('groupId').value = data.id;
+      document.getElementById('groupName').value = data.groupName;
+
+
+      editModal.show();
+    }
+
+    function deleteButtonFormatter(cell, formatterParams, onRendered) {
+      var deleteButton = document.createElement("button");
+      deleteButton.className = "btn btn-outline-danger btn-sm";
+      deleteButton.textContent = "Deletar";
+      var rowData = cell.getRow().getData();
+      deleteButton.addEventListener("click", function () {
+        if (confirm("Tem certeza que deseja deletar o Grupo?")) {
+          window.location.href = '/delete-group/' + rowData.id;
+        }
+      });
+      return deleteButton;
+    }
+  });
+</script>
+{% endblock %}
