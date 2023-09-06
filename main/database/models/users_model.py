@@ -1,6 +1,7 @@
-from main.utils.enums.users import GenderEnum
 from typing import Optional
 from sqlmodel import Field, SQLModel
+
+from main.database.models.users.user_groups_model import UserGroups
 
 
 class Users(SQLModel, table=True):
@@ -10,5 +11,4 @@ class Users(SQLModel, table=True):
     fullName: str = Field(max_length=50, min_length=10)
     document: str = Field(max_length=14, min_length=11, unique=True)
     active: Optional[bool] = True
-    gender: Optional[GenderEnum] = None
-    userGroupId: Optional[str] 
+    userGroupId: Optional[int] = Field(default=None, foreign_key=UserGroups.id)

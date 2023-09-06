@@ -1,6 +1,8 @@
 from typing import Optional
 from sqlmodel import Field, SQLModel
 
+from main.database.models.users_model import Users
+
 
 class Customers(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -11,4 +13,4 @@ class Customers(SQLModel, table=True):
     contact: Optional[str] = Field(max_length=1000, default=None)
     address: Optional[str] = Field(max_length=1000, default=None)
     active: Optional[bool] = True
-    walletManagerId: Optional[int] = Field(default=None, foreign_key="users.id")
+    walletManagerId: Optional[int] = Field(default=None, foreign_key=Users.id)

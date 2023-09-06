@@ -1,10 +1,12 @@
 import json
-from main.database.models.users.user_groups_models import UserGroups
+from typing import List
+
+from main.database.models.users.user_groups_model import UserGroups
 from main.database.models.database import Database, select
+from main.database.models.users.group_permissions_model import GroupPermissions
 from flask import (
-    jsonify,
-    Blueprint,
     abort,
+    Blueprint,
     make_response,
     redirect,
     render_template,
@@ -60,3 +62,54 @@ class UserGroupsCtrl:
                 print(f"Exception: {e}")
                 return make_response("Internal Server Error", 500)
         return redirect("/login")
+
+    @staticmethod
+    @bp.route("/register-routes-group", methods=["POST"])
+    def register_routes_in_group():
+        try:
+            data = request.json
+            print(f"DATA: {data}")
+            if data:
+                check_group_permission = UserGroupsCtrl.check_permission_group(
+                    data["userGroupsId"], data["routeId"]
+                )
+                if check_group_permission:
+                    group_permissions = GroupPermissions(
+                        userGroupsId=data["userGroupsId"],
+                        routeId=data["routeId"],
+                    )
+                    print(f"SAVE_GROUP_PERMISSION: {group_permissions}")
+                    Database().save(group_permissions)
+                    return make_response("SUCCESS", 200)
+                return make_response("CONFLICT", 409)
+            return make_response("BAD_REQUEST", 400)
+
+        except Exception as e:
+            print(f"Exception: {e}")
+            return make_response("INTERNAL_SERVER_ERROR", 500)
+
+    @bp.route("/delete-route-group/<id>")
+    def delete_route_group(id):
+        if session:
+            statement = select(GroupPermissions).where(GroupPermissions.id == id)
+            group_permission: GroupPermissions = Database().get_one(statement)
+            print(f"group_permission: {group_permission}")
+            if group_permission:
+                Database().delete(group_permission)
+                return make_response('SUCCESS', 200)
+            print(f'THERE_IS_NO_PERMISSION_FOR_GROUP')
+            return make_response('CONFLICT', 409)
+
+    @staticmethod
+    def check_permission_group(userGroupsId, routeId):
+        statement = select(GroupPermissions).where(
+            GroupPermissions.userGroupsId == userGroupsId,
+            GroupPermissions.routeId == routeId,
+        )
+        group_permission: List[GroupPermissions] = Database().get_all(statement)
+        print(f"group_permission: {group_permission}")
+        if not group_permission:
+            print(f'THERE_IS_NO_PERMISSION_FOR_GROUP')
+            return True
+        print(f'PERMISSION_ALREADY_EXISTS_FOR_GROUP')
+        return False

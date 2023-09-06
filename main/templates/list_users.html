@@ -22,13 +22,6 @@
             <label for="document">Documento</label>
             <input type="text" id="document" name="document" class="form-control">
           </div>
-          <div class="col-md-4">
-            <label for="gender">Gênero</label>
-            <select type="text" id="gender" name="gender" class="form-control">
-              <option value="male">Masculino</option>
-              <option value="female">Feminino</option>
-            </select>
-          </div>
           <!-- TODO: incrementar após criação do endpoint create group -->
           <div class="col-md-2">
             <label for="userGroupId">Grupo</label>
@@ -83,16 +76,11 @@
             <input type="text" id="document" name="document" class="form-control">
           </div>
           <div class="col-md-3">
-            <label for="gender">Gênero</label>
-            <select type="text" id="gender" name="gender" class="form-control">
-              <option value="male">Masculino</option>
-              <option value="female">Feminino</option>
-            </select>
           </div>
-          <!-- <div class="col-md-3">
+          <div class="col-md-3">
             <label for="userGroupId">Grupo</label>
             <input type="text" id="userGroupId" name="userGroupId" class="form-control">
-          </div> -->
+          </div>
           <legend>Dados de Login</legend>
           <div class="col-md-5">
             <label for="user">Usuário</label>
@@ -126,8 +114,8 @@
         { title: "Usuário", field: "user", width: 200, headerFilter: true },
         { title: "Grupo", field: "userGroupId", width: 200, headerFilter: true },
         { title: "Status", field: "active", width: 150, headerFilter: true },
-        { title: "Ação", formatter: editButtonFormatter, width: 100, hozAlign: "center" },
-        { title: "Ação", formatter: deleteButtonFormatter, width: 100, hozAlign: "center" },
+        { title: "", formatter: editButtonFormatter, width: 100, hozAlign: "center" },
+        { title: "", formatter: deleteButtonFormatter, width: 100, hozAlign: "center" },
       ],
     });
 
@@ -153,7 +141,6 @@
       document.getElementById('userId').value = data.id;
       document.getElementById('fullName').value = data.fullName;
       document.getElementById('document').value = data.document;
-      document.getElementById('gender').value = data.gender;
       document.getElementById('userGroupId').value = data.userGroupId;
       document.getElementById('user').value = data.user;
       document.getElementById('password').value = data.password;

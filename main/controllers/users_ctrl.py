@@ -11,7 +11,6 @@ from flask import (
     session,
 )
 from main.database.models.users_model import Users
-from main.utils.enums.users import GenderEnum
 from main.utils.utils import hash_password
 
 bp = Blueprint(
@@ -22,6 +21,7 @@ bp = Blueprint(
 
 
 class UserCtrl:
+    
     @staticmethod
     @bp.route("/create-user", methods=["POST", "GET"])
     def create_user():
@@ -37,7 +37,6 @@ class UserCtrl:
                             password=password,
                             fullName=data["fullName"],
                             document=data["document"],
-                            gender=data["gender"],
                             userGroupId=data["userGroupId"]
                         )
                         Database().save(usuario)
@@ -69,7 +68,6 @@ class UserCtrl:
                         "fullName": user.fullName,
                         "document": user.document,
                         "active": user.active,
-                        "gender": str(user.gender),
                     }
                 )
             return render_template(
@@ -85,21 +83,16 @@ class UserCtrl:
         if session:
             try:
                 if request.method == "GET":
-                    statementUser = select(Users).where(Users.id == id)
-                    usuario: Users = Database().get_one(statementUser)
+                    statement_user = select(Users).where(Users.id == id)
+                    usuario: Users = Database().get_one(statement_user)
                     return render_template(
                         "update_users.html", titulo="Editar Usuário", users=usuario
                     )
 
-                statementUser = select(Users).where(Users.id == id)
-                usuario: Users = Database().get_one(statementUser)
+                statement_user = select(Users).where(Users.id == id)
+                usuario: Users = Database().get_one(statement_user)
                 data = request.form
-                print(f"data recebido na request: {data}")
                 if data:
-                    if data["gender"] == "male":
-                        usuario.gender = GenderEnum.MALE
-                    else:
-                        usuario.gender = GenderEnum.FEMALE
                     if data.get("active"):
                         usuario.active = True
                     else:
@@ -143,8 +136,6 @@ class UserCtrl:
                 password=password,
                 fullName="User Admin",
                 document="12345679821",
-                gender=GenderEnum.MALE,
-                userGroupId="administrator"
             )
             Database().save(usuario)
             return make_response("Sucesso", 200)
