@@ -7,7 +7,8 @@ from flask import (
     render_template,
     session,
 )
-from main.database.models.users.routes_models import Routes
+from main.database.models.users.routes_model import Routes
+import json
 
 bp = Blueprint("routes", __name__, template_folder="templates")
 
@@ -29,11 +30,20 @@ class RoutesCtrl:
             return make_response("Internal Server Error", 500)
 
     @bp.route("/list-routes")
-    def list_routes():
+    def list_all_routes():
         if session:
             statement_routes = select(Routes)
-            routes: Routes = Database().get_all(statement_routes)
-            return render_template(
-                "list_routes.html", titulo="Lista de Rotas", routes=routes
-            )
-        return redirect("/")
+            routes = Database().get_all(statement_routes)
+            routes_json = []
+            for route in routes:
+                routes_json.append(
+                    {
+                        "id": route.id,
+                        "routeName": route.routeName,
+                        "route": route.route,
+                    }
+                )
+            return json.dumps(routes_json), 200
+        
+        return redirect("/login")
+

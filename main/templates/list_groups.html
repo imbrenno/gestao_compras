@@ -2,11 +2,32 @@
 {% block conteudo%}
 <div id="list-groups"></div>
 
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Permissões</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="list-routes"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createGroupModal">
   Criar Grupo
 </button>
 
-<!-- Modal de Criação de Usuário -->
+<!-- Modal de Criação de Grupo -->
 <div class="modal fade" id="createGroupModal" tabindex="-1" aria-labelledby="createGroupModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
     <div class="modal-content">
@@ -20,7 +41,7 @@
             <label for="groupName">Nome do Grupo</label>
             <input type="text" id="groupName" name="groupName" class="form-control">
           </div>
-            <div class="modal-footer">
+          <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             <button type="submit" class="btn btn-primary">Salvar</button>
           </div>
@@ -30,13 +51,13 @@
   </div>
 </div>
 
-<div id="dvDados" style="display: none;">{{ groups }}</div>
+<div id="dataGroups" style="display: none;">{{ groups }}</div>
 <script src="{{ url_for('static', filename='tabulator/js/tabulator.min.js') }}"></script>
 <link href="{{ url_for('static', filename='tabulator/css/tabulator_bootstrap4.css') }}" rel="stylesheet">
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     var table = new Tabulator("#list-groups", {
-      data: JSON.parse(document.getElementById('dvDados').textContent),
+      data: JSON.parse(document.getElementById('dataGroups').textContent),
       height: "311px",
       layout: "fitColumns",
       columns: [
@@ -57,22 +78,40 @@
       editButton.addEventListener("click", function () {
         openEditModal(rowData);
       });
-      
+
       return editButton;
     }
 
 
     function openEditModal(data) {
-      var editModal = new bootstrap.Modal(document.getElementById('editModal'));
-      let editForm = document.getElementById("editForm");
-      
-      editForm.setAttribute('action', '/update-group/' + data.id);
-      document.getElementById('groupId').value = data.id;
-      document.getElementById('groupName').value = data.groupName;
+      // Requisição GET: /list-routes
+      // A resposta será o data
+      var editModal = new bootstrap.Modal(document.getElementById("editModal"));
+      var get = new XMLHttpRequest();
 
+      get.open("GET", "/list-routes", true);
+      get.send();
+      get.onreadystatechange = function () {
+        if (get.readyState == 4 && get.status == 200) {
+          console.log(get.responseText);
+          
+          var table = new Tabulator("#list-routes", {
+            data: JSON.parse(get.responseText),
+            height: "311px",
+            layout: "fitColumns",
+            columns: [
+              { title: "ID", field: "id", width: 70, headerFilter: true },
+              { title: "Nome", field: "routeName", width: 200, headerFilter: true },
+              { title: "Rota", field: "route", width: 200, headerFilter: true },
+              {title:"Status", field:"car", hozAlign:"center", formatter:"tickCross",  headerFilter:"tickCross",  headerFilterParams:{"tristate":true},headerFilterEmptyCheck:function(value){return value === null}},
+            ],
+          });
 
-      editModal.show();
+          editModal.show(); // Exibir o modal
+        }
+      }
     }
+
 
     function deleteButtonFormatter(cell, formatterParams, onRendered) {
       var deleteButton = document.createElement("button");
@@ -87,5 +126,8 @@
       return deleteButton;
     }
   });
+
+
+
 </script>
 {% endblock %}

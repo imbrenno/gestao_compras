@@ -1,5 +1,6 @@
 from typing import Optional
 from sqlmodel import Field, SQLModel
+from main.database.models.users_model import Users
 from main.utils.enums.supplier import SuplierPaymentTypesEnum
 
 
@@ -14,4 +15,4 @@ class Suppliers(SQLModel, table=True):
     category: Optional[str] = None
     paymentTypes: Optional[SuplierPaymentTypesEnum] = None
     active: Optional[bool] = True
-    walletManagerId: Optional[int] = Field(default=None, foreign_key="users.id")
+    walletManagerId: Optional[int] = Field(default=None, foreign_key=Users.id)
