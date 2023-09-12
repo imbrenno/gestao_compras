@@ -94,18 +94,43 @@
       get.onreadystatechange = function () {
         if (get.readyState == 4 && get.status == 200) {
           console.log(get.responseText);
-          
+
           var table = new Tabulator("#list-routes", {
-            data: JSON.parse(get.responseText),
-            height: "311px",
+            height: 311,
             layout: "fitColumns",
+            movableRows: true,
+            movableRowsConnectedTables: "#example-table-receiver",
+            movableRowsReceiver: "add",
+            movableRowsSender: "delete",
+            placeholder: "All Rows Moved",
+            data: JSON.parse(get.responseText),
             columns: [
-              { title: "ID", field: "id", width: 70, headerFilter: true },
-              { title: "Nome", field: "routeName", width: 200, headerFilter: true },
-              { title: "Rota", field: "route", width: 200, headerFilter: true },
-              {title:"Status", field:"car", hozAlign:"center", formatter:"tickCross",  headerFilter:"tickCross",  headerFilterParams:{"tristate":true},headerFilterEmptyCheck:function(value){return value === null}},
+              { title: "Nome", field: "routeName"},
             ],
           });
+
+          //Table to move rows to
+          var table = new Tabulator("#list-routes", {
+            height: 311,
+            layout: "fitColumns",
+            placeholder: "Drag Rows Here",
+            data: [],
+            columns: [
+              { title: "Nome", field: "routeName"},
+            ],
+          });
+
+          // var table = new Tabulator("#list-routes", {
+          //   data: JSON.parse(get.responseText),
+          //   height: "311px",
+          //   layout: "fitColumns",
+          //   columns: [
+          //     { title: "ID", field: "id", width: 70, headerFilter: true },
+          //     { title: "Nome", field: "routeName", width: 200, headerFilter: true },
+          //     { title: "Rota", field: "route", width: 200, headerFilter: true },
+          //     {title:"Status", field:"car", hozAlign:"center", formatter:"tickCross",  headerFilter:"tickCross",  headerFilterParams:{"tristate":true},headerFilterEmptyCheck:function(value){return value === null}},
+          //   ],
+          // });
 
           editModal.show(); // Exibir o modal
         }
