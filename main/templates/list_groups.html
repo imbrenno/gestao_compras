@@ -3,17 +3,24 @@
 <div id="list-groups"></div>
 
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Editar Permissões</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div id="list-routes"></div>
+        <div style="width: 100%; display: flex; flex-wrap: nowrap; flex-direction: row;">
+          <div id="list-routes" style="width: 50%;"></div>
+          <div style="width: 50%;">
+            <div id="routes-released"></div>
+          </div>
+        </div>
+
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="button" onclick="saveTable()" class="btn btn-primary" data-bs-dismiss="modal">Salvar</button>
         </div>
       </div>
     </div>
@@ -55,6 +62,8 @@
 <script src="{{ url_for('static', filename='tabulator/js/tabulator.min.js') }}"></script>
 <link href="{{ url_for('static', filename='tabulator/css/tabulator_bootstrap4.css') }}" rel="stylesheet">
 <script>
+
+  var rowData;
   document.addEventListener("DOMContentLoaded", function () {
     var table = new Tabulator("#list-groups", {
       data: JSON.parse(document.getElementById('dataGroups').textContent),
@@ -69,23 +78,26 @@
       ],
     });
 
+
+
+
     function editButtonFormatter(cell, formatterParams, onRendered) {
       var editButton = document.createElement("button");
       editButton.className = "btn btn-outline-warning btn-sm";
       editButton.textContent = "Editar";
 
-      var rowData = cell.getRow().getData();
+      rowData = cell.getRow().getData();
       editButton.addEventListener("click", function () {
         openEditModal(rowData);
       });
-
       return editButton;
     }
-
 
     function openEditModal(data) {
       // Requisição GET: /list-routes
       // A resposta será o data
+      var dataGroup = data;
+      console.log(dataGroup);
       var editModal = new bootstrap.Modal(document.getElementById("editModal"));
       var get = new XMLHttpRequest();
 
@@ -94,43 +106,21 @@
       get.onreadystatechange = function () {
         if (get.readyState == 4 && get.status == 200) {
           console.log(get.responseText);
+          var responseData = JSON.parse(get.responseText);
 
           var table = new Tabulator("#list-routes", {
             height: 311,
             layout: "fitColumns",
             movableRows: true,
-            movableRowsConnectedTables: "#example-table-receiver",
+            movableRowsConnectedTables: "#routes-released",
             movableRowsReceiver: "add",
             movableRowsSender: "delete",
             placeholder: "All Rows Moved",
-            data: JSON.parse(get.responseText),
+            data: responseData,
             columns: [
-              { title: "Nome", field: "routeName"},
+              { title: "Name", field: "routeName" },
             ],
           });
-
-          //Table to move rows to
-          var table = new Tabulator("#list-routes", {
-            height: 311,
-            layout: "fitColumns",
-            placeholder: "Drag Rows Here",
-            data: [],
-            columns: [
-              { title: "Nome", field: "routeName"},
-            ],
-          });
-
-          // var table = new Tabulator("#list-routes", {
-          //   data: JSON.parse(get.responseText),
-          //   height: "311px",
-          //   layout: "fitColumns",
-          //   columns: [
-          //     { title: "ID", field: "id", width: 70, headerFilter: true },
-          //     { title: "Nome", field: "routeName", width: 200, headerFilter: true },
-          //     { title: "Rota", field: "route", width: 200, headerFilter: true },
-          //     {title:"Status", field:"car", hozAlign:"center", formatter:"tickCross",  headerFilter:"tickCross",  headerFilterParams:{"tristate":true},headerFilterEmptyCheck:function(value){return value === null}},
-          //   ],
-          // });
 
           editModal.show(); // Exibir o modal
         }
@@ -138,11 +128,12 @@
     }
 
 
+
     function deleteButtonFormatter(cell, formatterParams, onRendered) {
       var deleteButton = document.createElement("button");
       deleteButton.className = "btn btn-outline-danger btn-sm";
       deleteButton.textContent = "Deletar";
-      var rowData = cell.getRow().getData();
+      rowData = cell.getRow().getData();
       deleteButton.addEventListener("click", function () {
         if (confirm("Tem certeza que deseja deletar o Grupo?")) {
           window.location.href = '/delete-group/' + rowData.id;
@@ -150,9 +141,55 @@
       });
       return deleteButton;
     }
+
   });
 
 
+
+  var table2 = new Tabulator("#routes-released", {
+    height: 311,
+    layout: "fitColumns",
+    placeholder: "Drag Rows Here",
+    data: [],
+    columns: [
+      { title: "Name", field: "routeName" },
+    ],
+  });
+
+  function saveTable() {
+    var dataGroup = rowData.id;
+    console.log(dataGroup);
+    var data = table2.getData()
+    console.log(data)
+
+    if (data !== null && data !== undefined)
+      data.forEach(function (item) {
+        item['userGroupsId'] = dataGroup;
+      });
+
+    else {
+      console.log('Error')
+    };
+    var post = new XMLHttpRequest();
+
+    post.open("POST", "/register-routes-group", true);
+    post.setRequestHeader("Content-Type", "application/json");
+    post.onreadystatechange = function () {
+      if (post.readyState === 4) {
+        if (post.status === 200) {
+          console.log("Resposta do servidor:", post.responseText);
+        } else {
+          console.error("Erro na requisição:", post.status);
+        }
+      }
+    };
+
+    // Converte os dados para JSON antes de enviar
+    var jsonData = JSON.stringify(data);
+    console.log(jsonData);
+    post.send(jsonData);
+
+  }
 
 </script>
 {% endblock %}
